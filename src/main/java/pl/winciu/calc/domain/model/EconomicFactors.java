@@ -1,4 +1,4 @@
-package calc.domain.model;
+package pl.winciu.calc.domain.model;
 
 import javax.persistence.*;
 import java.io.Serializable;

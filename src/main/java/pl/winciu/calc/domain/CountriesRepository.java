@@ -1,6 +1,6 @@
-package calc.domain;
+package pl.winciu.calc.domain;
 
-import calc.domain.model.Country;
+import pl.winciu.calc.domain.model.Country;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
 /**

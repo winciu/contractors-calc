@@ -1,4 +1,4 @@
-package calc.domain.api.representation;
+package pl.winciu.calc.domain.api.representation;
 
 /**
  * @author Adam Winciorek

@@ -1,8 +1,8 @@
-package calc.domain.api;
+package pl.winciu.calc.domain.api;
 
-import calc.domain.CountriesRepository;
-import calc.domain.api.representation.CurrencyRepresentation;
-import calc.domain.model.Country;
+import pl.winciu.calc.domain.CountriesRepository;
+import pl.winciu.calc.domain.api.representation.CurrencyRepresentation;
+import pl.winciu.calc.domain.model.Country;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
