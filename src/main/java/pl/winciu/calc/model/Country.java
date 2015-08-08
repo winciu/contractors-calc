@@ -14,21 +14,22 @@ public class Country implements Serializable{
 
     @Id
     private String code;
-    private Currency currency;
+    private Currency currencyCode;
     @Embedded
     private EconomicFactors economicFactors;
 
     public Country() {
+        // Default constructor for entity
     }
 
-    public Country(String code, Currency currency, EconomicFactors economicFactors) {
+    public Country(String code, Currency currencyCode, EconomicFactors economicFactors) {
         this.code = code;
-        this.currency = currency;
+        this.currencyCode = currencyCode;
         this.economicFactors = economicFactors;
     }
 
-    public Currency getCurrency() {
-        return currency;
+    public Currency getCurrencyCode() {
+        return currencyCode;
     }
 
 }

@@ -1,0 +1,28 @@
+<tabela_kursow typ="A" uid="15a152">
+    <numer_tabeli>152/A/NBP/2015</numer_tabeli>
+    <data_publikacji>2015-08-07</data_publikacji>
+    <pozycja>
+        <nazwa_waluty>bat (Tajlandia)</nazwa_waluty>
+        <przelicznik>1</przelicznik>
+        <kod_waluty>THB</kod_waluty>
+        <kurs_sredni>0,1090</kurs_sredni>
+    </pozycja>
+    <pozycja>
+        <nazwa_waluty>dolar amerykański</nazwa_waluty>
+        <przelicznik>1</przelicznik>
+        <kod_waluty>USD</kod_waluty>
+        <kurs_sredni>3,8326</kurs_sredni>
+    </pozycja>
+    <pozycja>
+        <nazwa_waluty>dolar australijski</nazwa_waluty>
+        <przelicznik>1</przelicznik>
+        <kod_waluty>AUD</kod_waluty>
+        <kurs_sredni>2,8250</kurs_sredni>
+    </pozycja>
+    <pozycja>
+        <nazwa_waluty>dolar Hongkongu</nazwa_waluty>
+        <przelicznik>1</przelicznik>
+        <kod_waluty>HKD</kod_waluty>
+        <kurs_sredni>0,4944</kurs_sredni>
+    </pozycja>
+</tabela_kursow>

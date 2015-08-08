@@ -25,7 +25,10 @@ public class CountriesController {
                     produces = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody CurrencyRepresentation getCurrencyCode(@PathVariable String countryCode) {
         Country country = repository.findOne(countryCode);
-        return new CurrencyRepresentation(country.getCurrency());
+        return new CurrencyRepresentation(country.getCurrencyCode());
     }
+
+
+
 
 }

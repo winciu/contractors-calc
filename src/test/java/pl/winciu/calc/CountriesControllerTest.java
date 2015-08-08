@@ -1,9 +1,12 @@
 package pl.winciu.calc;
 
-import pl.winciu.calc.api.CountriesController;
-import org.junit.Test;
 import org.junit.Before;
 import org.junit.Ignore;
+import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
+import pl.winciu.calc.api.CountriesController;
 import org.junit.runner.RunWith;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockServletContext;
@@ -13,29 +16,36 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import pl.winciu.calc.model.Country;
+import pl.winciu.calc.repository.CountriesRepository;
 
-import static org.hamcrest.Matchers.equalTo;
+import java.util.Currency;
+
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = MockServletContext.class)
 @WebAppConfiguration
-@Ignore
 public class CountriesControllerTest {
 
     private MockMvc mvc;
+    @Mock
+    private CountriesRepository countriesRepository;
 
     @Before
     public void setUp() throws Exception {
-        mvc = MockMvcBuilders.standaloneSetup(new CountriesController(null)).build();
+        MockitoAnnotations.initMocks(this);
+        mvc = MockMvcBuilders.standaloneSetup(new CountriesController(countriesRepository)).build();
     }
 
     @Test
     public void getCurrencyByCountryCode() throws Exception {
+        Country country = new Country("PL", Currency.getInstance("PLN"), null);
+        Mockito.when(countriesRepository.findOne(Mockito.anyString())).thenReturn(country);
         mvc.perform(MockMvcRequestBuilders.get("/api/countries/PL/currency").accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(content().node(equalTo("PLN")));
+                .andExpect(content().string("{\"code\":\"PLN\"}"));
     }
 
 }

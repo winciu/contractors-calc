@@ -14,6 +14,7 @@ public class EconomicFactors implements Serializable {
     private double fixedCosts;
 
     public EconomicFactors() {
+        // Default constructor for entity
     }
 
     public EconomicFactors(double taxRate, double fixedCosts) {
