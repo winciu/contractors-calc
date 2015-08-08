@@ -10,7 +10,7 @@ import java.util.Currency;
  */
 @Entity
 @Table(name = "countries")
-public class Country implements Serializable{
+public class Country implements Serializable {
 
     @Id
     private String code;
@@ -28,8 +28,15 @@ public class Country implements Serializable{
         this.economicFactors = economicFactors;
     }
 
+    public String getCode() {
+        return code;
+    }
+
     public Currency getCurrencyCode() {
         return currencyCode;
     }
 
+    public EconomicFactors getEconomicFactors() {
+        return economicFactors;
+    }
 }

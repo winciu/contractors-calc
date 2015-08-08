@@ -21,4 +21,12 @@ public class EconomicFactors implements Serializable {
         this.taxRate = taxRate;
         this.fixedCosts = fixedCosts;
     }
+
+    public double getTaxRate() {
+        return taxRate;
+    }
+
+    public double getFixedCosts() {
+        return fixedCosts;
+    }
 }
