@@ -1,4 +1,4 @@
-package pl.winciu.calc.domain.api.representation;
+package pl.winciu.calc.api.representation;
 
 import java.util.Currency;
 

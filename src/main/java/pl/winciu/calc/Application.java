@@ -1,8 +1,8 @@
 package pl.winciu.calc;
 
-import pl.winciu.calc.domain.CountriesRepository;
-import pl.winciu.calc.domain.model.Country;
-import pl.winciu.calc.domain.model.EconomicFactors;
+import pl.winciu.calc.repository.CountriesRepository;
+import pl.winciu.calc.model.Country;
+import pl.winciu.calc.model.EconomicFactors;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

@@ -1,6 +1,9 @@
 package pl.winciu.calc;
 
-import pl.winciu.calc.domain.api.CountriesController;
+import pl.winciu.calc.api.CountriesController;
+import org.junit.Test;
+import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.runner.RunWith;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockServletContext;
@@ -18,16 +21,17 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = MockServletContext.class)
 @WebAppConfiguration
+@Ignore
 public class CountriesControllerTest {
 
     private MockMvc mvc;
 
-//    @Before
+    @Before
     public void setUp() throws Exception {
         mvc = MockMvcBuilders.standaloneSetup(new CountriesController(null)).build();
     }
 
-//    @Test
+    @Test
     public void getCurrencyByCountryCode() throws Exception {
         mvc.perform(MockMvcRequestBuilders.get("/api/countries/PL/currency").accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
