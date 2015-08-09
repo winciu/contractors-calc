@@ -43,15 +43,6 @@ public class CountriesControllerTest {
     }
 
     @Test
-    public void getCurrencyByCountryCode() throws Exception {
-        Country country = new Country("PL", Currency.getInstance("PLN"), null);
-        Mockito.when(countriesRepository.findOne(Mockito.anyString())).thenReturn(country);
-        mvc.perform(MockMvcRequestBuilders.get("/api/countries/PL/currency").accept(MediaType.APPLICATION_JSON))
-           .andExpect(status().isOk())
-           .andExpect(content().string("{\"code\":\"PLN\"}"));
-    }
-
-    @Test
     public void shouldReturnAllAvailableCountries() throws Exception {
         Country country = new Country("PL", Currency.getInstance("PLN"),
                                       new EconomicFactors(19, 100));

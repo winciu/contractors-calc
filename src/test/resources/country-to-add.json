@@ -1,0 +1,9 @@
+{
+  "code": "FR",
+  "currencyCode": "EUR",
+  "economicFactors": {
+    "taxRate": 30,
+    "fixedCostsCurrencyCode": "EUR",
+    "fixedCostsValue": 700
+  }
+}

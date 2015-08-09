@@ -32,7 +32,7 @@ public class Application {
 
     @Bean InitializingBean populateCountries(CountriesRepository repository) {
         return () -> {
-            repository.save(new Country("UK", Currency.getInstance(Locale.UK), new EconomicFactors(25, 600)));
+            repository.save(new Country("GB", Currency.getInstance(Locale.UK), new EconomicFactors(25, 600)));
             repository.save(new Country("DE", Currency.getInstance(Locale.GERMANY), new EconomicFactors(20, 800)));
             repository.save(new Country("PL", Currency.getInstance(new Locale("pl", "PL")),
                                         new EconomicFactors(19, 1200)));
