@@ -1,15 +1,15 @@
-package pl.winciu.calc.api.representation;
+package pl.winciu.calc.service;
 
 import org.joda.money.Money;
 
 /**
  * @author Adam Winciorek
  */
-public class EconomicFactorRepresentation {
+public class WageMetadata {
     private final int taxRate;
     private final Money fixedCosts;
 
-    public EconomicFactorRepresentation(int taxRate, Money fixedCosts) {
+    public WageMetadata(int taxRate, Money fixedCosts) {
         this.taxRate = taxRate;
         this.fixedCosts = fixedCosts;
     }

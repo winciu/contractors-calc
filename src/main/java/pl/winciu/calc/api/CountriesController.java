@@ -1,5 +1,7 @@
 package pl.winciu.calc.api;
 
+import org.joda.money.CurrencyUnit;
+import org.joda.money.Money;
 import pl.winciu.calc.api.representation.CountriesRepresentation;
 import pl.winciu.calc.api.representation.CountryRepresentation;
 import pl.winciu.calc.api.representation.EconomicFactorRepresentation;
@@ -10,9 +12,6 @@ import pl.winciu.calc.model.Country;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author Adam Winciorek
@@ -28,22 +27,17 @@ public class CountriesController {
         this.repository = repository;
     }
 
-    @RequestMapping(value = "/{countryCode}/currency", method = RequestMethod.GET,
-                    produces = MediaType.APPLICATION_JSON_VALUE)
-    public @ResponseBody CurrencyRepresentation getCurrencyCode(@PathVariable String countryCode) {
-        Country country = repository.findOne(countryCode);
-        return new CurrencyRepresentation(country.getCurrencyCode());
-    }
-
     @RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody CountriesRepresentation getAllCountries() {
         final Iterable<Country> countries = repository.findAll();
         CountriesRepresentation countryRepresentations = new CountriesRepresentation();
         for (Country country : countries) {
             final EconomicFactors economicFactors = country.getEconomicFactors();
+            final Money fixedCosts = Money.of(CurrencyUnit.of(country.getCurrency()), economicFactors.getFixedCosts());
             EconomicFactorRepresentation economicFactor = new EconomicFactorRepresentation(economicFactors.getTaxRate(),
-                                                                                           economicFactors.getFixedCosts());
-            CurrencyRepresentation currencyRepresentation = new CurrencyRepresentation(country.getCurrencyCode());
+                                                                                           fixedCosts
+            );
+            CurrencyRepresentation currencyRepresentation = new CurrencyRepresentation(country.getCurrency());
             final CountryRepresentation countryRepresentation = new CountryRepresentation(country.getCode(),
                                                                                           currencyRepresentation,
                                                                                           economicFactor);

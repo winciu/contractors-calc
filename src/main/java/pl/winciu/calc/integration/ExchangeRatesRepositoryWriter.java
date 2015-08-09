@@ -1,6 +1,7 @@
 package pl.winciu.calc.integration;
 
 import pl.winciu.calc.model.ExchangeRate;
+import pl.winciu.calc.model.ExchangeRateId;
 import pl.winciu.calc.repository.ExchangeRatesRepository;
 
 import java.util.ArrayList;
@@ -20,13 +21,17 @@ public class ExchangeRatesRepositoryWriter {
     public void storeRates(ExchangeRates exchangeRates) {
         List<ExchangeRate> rates = convertToEntities(exchangeRates);
         repository.save(rates);
+//        repository.findAll().forEach(System.err::println);
     }
 
     private List<ExchangeRate> convertToEntities(ExchangeRates exchangeRates) {
         List<ExchangeRate> output = new ArrayList<>();
         for (ExchangeRates.ExchangeRate exchangeRate : exchangeRates) {
-            final ExchangeRate rate = new ExchangeRate(exchangeRate.getSourceCode(), exchangeRate.getTargetCode(), exchangeRate
-                    .getValue());
+            ExchangeRateId exchangeRateId = new ExchangeRateId(exchangeRates.getProviderName(),
+                                                               exchangeRate.getSourceCode(),
+                                                               exchangeRate.getTargetCode());
+            final ExchangeRate rate = new ExchangeRate(exchangeRateId, exchangeRate.getUnits(),
+                                                       exchangeRate.getValue().doubleValue());
             output.add(rate);
         }
         return output;

@@ -1,9 +1,10 @@
 package pl.winciu.calc.integration.nbp;
 
-import pl.winciu.calc.integration.nbp.adapters.DoubleValueXmlAdapter;
+import pl.winciu.calc.integration.nbp.adapters.BigDecimalValueXmlAdapter;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import java.math.BigDecimal;
 
 /**
  * @author Adam Winciorek
@@ -19,16 +20,16 @@ public class ExchangeRatesTableItem {
     private String currencyCode;
 
     @XmlElement(name = "kurs_kupna")
-    @XmlJavaTypeAdapter(DoubleValueXmlAdapter.class)
-    private Double buyRate;
+    @XmlJavaTypeAdapter(BigDecimalValueXmlAdapter.class)
+    private BigDecimal buyRate;
 
     @XmlElement(name = "kurs_sprzedazy")
-    @XmlJavaTypeAdapter(DoubleValueXmlAdapter.class)
-    private Double sellRate;
+    @XmlJavaTypeAdapter(BigDecimalValueXmlAdapter.class)
+    private BigDecimal sellRate;
 
     @XmlElement(name = "kurs_sredni")
-    @XmlJavaTypeAdapter(DoubleValueXmlAdapter.class)
-    private Double averageRate;
+    @XmlJavaTypeAdapter(BigDecimalValueXmlAdapter.class)
+    private BigDecimal averageRate;
 
     public String getCurrencyName() {
         return currencyName;
@@ -42,15 +43,15 @@ public class ExchangeRatesTableItem {
         return currencyCode;
     }
 
-    public double getBuyRate() {
+    public BigDecimal getBuyRate() {
         return buyRate;
     }
 
-    public double getSellRate() {
+    public BigDecimal getSellRate() {
         return sellRate;
     }
 
-    public double getAverageRate() {
+    public BigDecimal getAverageRate() {
         return averageRate;
     }
 }

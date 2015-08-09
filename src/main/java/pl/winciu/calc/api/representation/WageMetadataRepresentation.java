@@ -5,13 +5,19 @@ import org.joda.money.Money;
 /**
  * @author Adam Winciorek
  */
-public class EconomicFactorRepresentation {
+public class WageMetadataRepresentation {
+    private final Money taxAmount;
     private final int taxRate;
     private final Money fixedCosts;
 
-    public EconomicFactorRepresentation(int taxRate, Money fixedCosts) {
+    public WageMetadataRepresentation(Money taxAmount, int taxRate, Money fixedCosts) {
+        this.taxAmount = taxAmount;
         this.taxRate = taxRate;
         this.fixedCosts = fixedCosts;
+    }
+
+    public Money getTaxAmount() {
+        return taxAmount;
     }
 
     public int getTaxRate() {

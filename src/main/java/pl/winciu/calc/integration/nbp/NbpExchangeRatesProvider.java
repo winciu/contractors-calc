@@ -23,6 +23,7 @@ import java.util.Optional;
 public class NbpExchangeRatesProvider implements ExchangeRatesProvider {
 
     private static final Logger logger = LoggerFactory.getLogger(NbpExchangeRatesProvider.class);
+    private static final String PROVIDER_NAME = "NBP";
     private final URI sourceUri;
 
     @Autowired
@@ -32,16 +33,16 @@ public class NbpExchangeRatesProvider implements ExchangeRatesProvider {
 
     @Override public ExchangeRates obtainRates() {
         final Optional<ExchangeRatesTable> exchangeRatesTable = parseData();
-        if (!exchangeRatesTable.isPresent()) {
+        if (exchangeRatesTable.isPresent()) {
             return convertToOutputFormat(exchangeRatesTable.get());
         }
         return ExchangeRates.empty();
     }
 
     private ExchangeRates convertToOutputFormat(ExchangeRatesTable exchangeRatesTable) {
-        ExchangeRates exchangeRates = new ExchangeRates();
+        ExchangeRates exchangeRates = new ExchangeRates(PROVIDER_NAME);
         for (ExchangeRatesTableItem item : exchangeRatesTable) {
-            exchangeRates.addRate(Currency.getInstance(item.getCurrencyCode()), item.getBuyRate());
+            exchangeRates.addRate(Currency.getInstance(item.getCurrencyCode()), item.getBuyRate(), item.getUnit());
         }
         return exchangeRates;
     }

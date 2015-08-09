@@ -1,5 +1,6 @@
 package pl.winciu.calc.integration;
 
+import java.math.BigDecimal;
 import java.util.*;
 
 /**
@@ -7,19 +8,25 @@ import java.util.*;
  */
 public class ExchangeRates implements Iterable<ExchangeRates.ExchangeRate> {
 
-    private static final ExchangeRates EMPTY_EXCHANGE_RATES = new ExchangeRates();
+    private static final ExchangeRates EMPTY_EXCHANGE_RATES = new ExchangeRates(null);
+    private final String providerName;
     private final Set<ExchangeRate> rates;
 
-    public ExchangeRates() {
+    public ExchangeRates(String providerName) {
+        this.providerName = providerName;
         rates = new HashSet<>();
+    }
+
+    public String getProviderName() {
+        return providerName;
     }
 
     @Override public Iterator<ExchangeRate> iterator() {
         return rates.iterator();
     }
 
-    public void addRate(Currency code, double value) {
-        rates.add(new ExchangeRate(value, Currency.getInstance("PLN"), code));
+    public void addRate(Currency code, BigDecimal value, int unit) {
+        rates.add(new ExchangeRate(value, Currency.getInstance("PLN"), code, unit));
     }
 
     public static ExchangeRates empty() {
@@ -31,17 +38,19 @@ public class ExchangeRates implements Iterable<ExchangeRates.ExchangeRate> {
     }
 
     class ExchangeRate {
-        private final double value;
+        private final BigDecimal value;
         private final Currency sourceCode;
         private final Currency targetCode;
+        private final int units;
 
-        ExchangeRate(double value, Currency sourceCode, Currency targetCode) {
+        ExchangeRate(BigDecimal value, Currency sourceCode, Currency targetCode, int units) {
             this.value = value;
             this.sourceCode = sourceCode;
             this.targetCode = targetCode;
+            this.units = units;
         }
 
-        public double getValue() {
+        public BigDecimal getValue() {
             return value;
         }
 
@@ -51,6 +60,10 @@ public class ExchangeRates implements Iterable<ExchangeRates.ExchangeRate> {
 
         public Currency getTargetCode() {
             return targetCode;
+        }
+
+        public int getUnits() {
+            return units;
         }
 
         @Override
