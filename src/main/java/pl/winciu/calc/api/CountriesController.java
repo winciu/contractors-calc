@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import java.math.BigDecimal;
 import java.net.URI;
 import java.util.Currency;
+import java.util.Objects;
 
 /**
  * @author Adam Winciorek
@@ -78,9 +79,22 @@ public class CountriesController {
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/{code}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public CountryRepresentation getCountryByCode(@PathVariable("code") String countryCode) {
+    public ResponseEntity<CountryRepresentation> getCountryByCode(@PathVariable("code") String countryCode) {
         final Country country = repository.findOne(countryCode);
-        return convertToRepresentation(country);
+        if (Objects.isNull(country)) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(convertToRepresentation(country), HttpStatus.OK);
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/codes", produces = MediaType.APPLICATION_JSON_VALUE)
+    public CountriesRepresentation getCountriesCodeOnly() {
+        String[] codes = repository.findCodesOnly();
+        CountriesRepresentation countriesRepresentation = new CountriesRepresentation();
+        for (String code : codes) {
+            countriesRepresentation.add(new CountryRepresentation(code));
+        }
+        return countriesRepresentation;
     }
 
 }

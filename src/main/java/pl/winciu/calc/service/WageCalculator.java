@@ -6,6 +6,8 @@ import pl.winciu.calc.model.Country;
 import pl.winciu.calc.model.EconomicFactors;
 import pl.winciu.calc.model.ExchangeRate;
 
+import java.util.Objects;
+
 /**
  * @author Adam Winciorek
  */
@@ -24,7 +26,7 @@ public class WageCalculator {
     public Wage calculate(Money dayRate, int workingDaysInMonth) {
         final Money monthlyRate = dayRate.multipliedBy(workingDaysInMonth);
         final EconomicFactors economicFactors = country.getEconomicFactors();
-        if (exchangeRate == null || !isCurrencyConversionNeeded(dayRate)) {
+        if (Objects.isNull(exchangeRate) || !isCurrencyConversionNeeded(dayRate)) {
             final Money fixedCostsInOriginalCurrency = Money.of(CurrencyUnit.of(country.getCurrency()),
                                                                 economicFactors.getFixedCosts());
             return new Wage(monthlyRate, new WageMetadata(economicFactors.getTaxRate(), fixedCostsInOriginalCurrency));

@@ -4,13 +4,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.NumberUtils;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
+import pl.winciu.calc.api.representation.ErrorRepresentation;
 import pl.winciu.calc.api.representation.WageMetadataRepresentation;
 import pl.winciu.calc.api.representation.WageRepresentation;
 import pl.winciu.calc.service.Wage;
 import pl.winciu.calc.service.WageService;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 
 /**
  * @author Adam Winciorek
@@ -27,13 +31,24 @@ public class WageController {
     }
 
     @RequestMapping(value = "/calculate", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public @ResponseBody ResponseEntity<WageRepresentation> calculateWage(
+    public @ResponseBody ResponseEntity<?> calculateWage(
             @RequestParam(value = "countryCode") String countryCode,
-            @RequestParam(value = "dayRate") BigDecimal dayRate,
+            @RequestParam(value = "dayRate") String dayRate,
             @RequestParam(value = "exchgRateProvider", required = false) String providerName) {
-        final Wage wage = wageService.calculateWage(countryCode, dayRate, providerName);
+        final ErrorRepresentation error = validateRequest(countryCode, dayRate);
+        if (Objects.nonNull(error)) {
+            return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+        }
+
+        final Wage wage;
+        try {
+            wage = wageService.calculateWage(countryCode, new BigDecimal(dayRate), providerName);
+        } catch (Exception e) {
+            return new ResponseEntity<Object>(new ErrorRepresentation(e.getLocalizedMessage()),
+                                              HttpStatus.INTERNAL_SERVER_ERROR);
+        }
         if (wage == null) {
-            return new ResponseEntity<>((WageRepresentation) null, HttpStatus.CONFLICT);
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
         WageMetadataRepresentation metadata = new WageMetadataRepresentation(wage.calculateTaxAmount(),
                                                                              wage.getMetadata().getTaxRate(),
@@ -42,5 +57,26 @@ public class WageController {
                                                                              wage.getGrossValue(),
                                                                              wage.calculateNetValue(), metadata);
         return new ResponseEntity<>(wageRepresentation, HttpStatus.OK);
+    }
+
+    private ErrorRepresentation validateRequest(@RequestParam(value = "countryCode") String countryCode,
+                                                @RequestParam(value = "dayRate") String dayRate) {
+        String message = null;
+        if (StringUtils.isEmpty(countryCode)) {
+            message = "Country is not specified";
+        }else {
+            try {
+                NumberUtils.parseNumber(dayRate, BigDecimal.class);
+            } catch (IllegalArgumentException e) {
+                message = String.format("'%s' is not a valid number", dayRate);
+            }
+        }
+        if (StringUtils.isEmpty(dayRate)) {
+            message = "Day rate is not specified";
+        }
+        if (Objects.isNull(message)) {
+            return null;
+        }
+        return new ErrorRepresentation(message);
     }
 }

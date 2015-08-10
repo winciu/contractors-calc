@@ -6,9 +6,47 @@
     <script src="js/calc.js"></script>
 </head>
 
-<body ng-app="demo">
-<div ng-controller="Calc">
-    <p>The ID is {{countries.countries.code}}</p>
-</div>
+<body ng-app="demo" ng-controller="Calc">
+<section id="page_content">
+    <h1>Przelicznik<br/>Kontraktora</h1>
+    <span>Aplikacja ma za zadanie wyliczyć miesięczny zarobek netto w PLN na kontrakcie w Niemczech, Wielkiej Brytanii i Polsce</span>
+    <ol>
+        <li>
+            <span>Wybierz kraj</span>
+
+            <div ng-repeat="country in countries.countries">
+                <input type="radio" name="country_group" value="{{country.code}}" ng-model="selectedCountry.code"
+                       ng-change="pickCountry(selectedCountry.code)">
+                <span>{{country.countryName}}</span>
+            </div>
+        </li>
+        <li>
+            <span>Wpisz stawke dzienną</span>
+
+            <div>
+                <input type="text" size="20" placeholder="kwota netto" ng-model="dayRate"
+                       ng-change="calculateWage(dayRate, selectedCountry.code)">
+                <span>{{selectedCountry.currency.code}}</span>
+            </div>
+        </li>
+    </ol>
+</section>
+<section>
+    <div>
+        <h1>Wynik</h1>
+        <span>Stawka miesięczna netto</span>
+        <span>{{wage.netWage.amount}} {{wage.netWage.currencyUnit.code}}</span>
+    </div>
+    <div>
+        <div>
+            <span>Podatek dochodowy ({{selectedCountry.economicFactors.taxRate}}%)</span>
+            <span>{{wage.metadata.tax.amount}} {{wage.metadata.tax.currencyUnit.code}}</span>
+        </div>
+        <div>
+            <span>Koszt stały</span>
+            <span>{{fixedCost.amount}} {{fixedCost.currency}}</span>
+        </div>
+    </div>
+</section>
 </body>
 </html>

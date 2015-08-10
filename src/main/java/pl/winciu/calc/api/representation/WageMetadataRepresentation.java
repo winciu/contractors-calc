@@ -6,18 +6,18 @@ import org.joda.money.Money;
  * @author Adam Winciorek
  */
 public class WageMetadataRepresentation {
-    private final Money taxAmount;
+    private final Money tax;
     private final int taxRate;
     private final Money fixedCosts;
 
-    public WageMetadataRepresentation(Money taxAmount, int taxRate, Money fixedCosts) {
-        this.taxAmount = taxAmount;
+    public WageMetadataRepresentation(Money tax, int taxRate, Money fixedCosts) {
+        this.tax = tax;
         this.taxRate = taxRate;
         this.fixedCosts = fixedCosts;
     }
 
-    public Money getTaxAmount() {
-        return taxAmount;
+    public Money getTax() {
+        return tax;
     }
 
     public int getTaxRate() {
