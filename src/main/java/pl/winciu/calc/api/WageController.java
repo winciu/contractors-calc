@@ -1,5 +1,7 @@
 package pl.winciu.calc.api;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -23,6 +25,8 @@ import java.util.Objects;
 @RestController
 @RequestMapping("/api/wage")
 public class WageController {
+    private static final Logger logger = LoggerFactory.getLogger(WageController.class);
+
 
     private final WageService wageService;
 
@@ -46,6 +50,7 @@ public class WageController {
         try {
             wage = wageService.calculateWage(countryCode, new BigDecimal(dayRate), dayRateType, providerName);
         } catch (Exception e) {
+            logger.error("wage calculation failed", e);
             return new ResponseEntity<Object>(new ErrorRepresentation(e.getLocalizedMessage()),
                                               HttpStatus.INTERNAL_SERVER_ERROR);
         }

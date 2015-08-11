@@ -13,6 +13,6 @@ public class NetGrossCalculator {
     }
 
     private BigDecimal percentAsFraction(double percent) {
-        return BigDecimal.valueOf(percent).divide(BigDecimal.valueOf(100));
+        return BigDecimal.valueOf(percent).movePointLeft(2);
     }
 }

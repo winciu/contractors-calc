@@ -10,7 +10,7 @@ import java.math.BigDecimal;
  * @author Adam Winciorek
  */
 public class NetGrossCalculatorTest {
-    private static final BigDecimal GROSS_VALUE = new BigDecimal("18450.00");
+    private static final BigDecimal GROSS_VALUE = new BigDecimal("18450.000");
     private static final BigDecimal NET_VALUE = BigDecimal.valueOf(15000);
     private static final int TAX = 23;
 

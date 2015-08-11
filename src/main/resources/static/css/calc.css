@@ -1,0 +1,56 @@
+.pageTitle, .resultLabel {
+      text-transform: uppercase;
+      color: black;
+}
+
+body {
+    background: #CFD3D4;
+}
+
+li {
+    padding: 10px;
+}
+
+section {
+    padding: 12px;
+    margin: 12px;
+}
+
+section.intro {
+   padding: 0px;
+   margin: 0px;
+}
+
+section.input {
+    background: white;
+}
+
+section.result {
+    /*border-style: solid;
+    border-width: 1px;*/
+    background: #DCDFE0;
+}
+
+#page_content {
+    position:absolute;
+     width:600px;
+     height:400px;
+     top:50%;
+     left:50%;
+     margin:-300px 0 0 -300px;
+}
+
+#economic-factors {
+    display: inline;
+}
+
+.money {
+    text-transform: uppercase;
+    font-weight: bold;
+    font-size:small;
+}
+
+.core_money {
+    font-size:medium;
+}
+
