@@ -15,28 +15,42 @@ public class WageCalculator {
 
     private final Country country;
     private final ExchangeRate exchangeRate;
-    private final CurrencyCalculator currencyCalculator;
 
     public WageCalculator(Country countryYouWorkIn, ExchangeRate exchangeRate) {
         this.country = countryYouWorkIn;
         this.exchangeRate = exchangeRate;
-        this.currencyCalculator = new CurrencyCalculator();
     }
 
-    public Wage calculate(Money dayRate, int workingDaysInMonth) {
-        final Money monthlyRate = dayRate.multipliedBy(workingDaysInMonth);
+    public Wage calculate(Money dayRate, GrossNetType dayRateType, int workingDaysInMonth) {
+        Money dayRateGross = dayRate;
+        if (GrossNetType.NET.equals(dayRateType)) {
+            NetGrossCalculator netGrossCalculator = new NetGrossCalculator();
+            final int percent = country.getEconomicFactors().getTaxRate();
+            dayRateGross = dayRate.withAmount(netGrossCalculator.asGross(dayRate.getAmount(), percent));
+        }
+        final Money monthlyRate = dayRateGross.multipliedBy(workingDaysInMonth);
         final EconomicFactors economicFactors = country.getEconomicFactors();
-        if (Objects.isNull(exchangeRate) || !isCurrencyConversionNeeded(dayRate)) {
+        if (Objects.isNull(exchangeRate) || !isCurrencyConversionNeeded(dayRateGross)) {
             final Money fixedCostsInOriginalCurrency = Money.of(CurrencyUnit.of(country.getCurrency()),
                                                                 economicFactors.getFixedCosts());
             return new Wage(monthlyRate, new WageMetadata(economicFactors.getTaxRate(), fixedCostsInOriginalCurrency));
         }
-
-        final Money grossValueInSourceCurrency = currencyCalculator.convert(monthlyRate, exchangeRate);
         final CurrencyUnit initialCurrency = CurrencyUnit.of(exchangeRate.getTargetCurrency());
         final Money fixedCostsInOriginalCurrency = Money.of(initialCurrency, economicFactors.getFixedCosts());
+        WageMetadata wageMetadata = new WageMetadata(economicFactors.getTaxRate(), fixedCostsInOriginalCurrency);
+        final Wage wageInOriginalCurrency = new Wage(monthlyRate, wageMetadata);
+
+        return convertWageToSourceCurrency(wageInOriginalCurrency, exchangeRate);
+    }
+
+    private static Wage convertWageToSourceCurrency(Wage wageInOriginalCurrency, ExchangeRate exchangeRate) {
+        final CurrencyCalculator currencyCalculator = new CurrencyCalculator();
+        final Money grossValueInSourceCurrency = currencyCalculator.convert(wageInOriginalCurrency.getGrossValue(),
+                                                                            exchangeRate);
+        final Money fixedCostsInOriginalCurrency = wageInOriginalCurrency.getMetadata().getFixedCosts();
         final Money fixedCostsInSourceCurrency = currencyCalculator.convert(fixedCostsInOriginalCurrency, exchangeRate);
-        WageMetadata wageMetadata = new WageMetadata(economicFactors.getTaxRate(), fixedCostsInSourceCurrency);
+        WageMetadata wageMetadata = new WageMetadata(wageInOriginalCurrency.getMetadata().getTaxRate(),
+                                                     fixedCostsInSourceCurrency);
         return new Wage(grossValueInSourceCurrency, wageMetadata);
     }
 

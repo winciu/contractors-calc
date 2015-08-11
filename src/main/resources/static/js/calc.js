@@ -26,7 +26,6 @@ angular.module('demo', [])
                     $scope.fixedCost.currency = data.economicFactors.fixedCosts.currencyUnit.code;
                 }
             }).error(function(data){
-                //reset previous wage calculation
                 $scope.wage = {};
             })
         }
@@ -37,6 +36,7 @@ angular.module('demo', [])
                   url: 'api/wage/calculate/?',
                   params: {
                     dayRate: dayRate,
+                    dayRateType: 'NET',
                     countryCode: countryCode
                   }
             }
@@ -45,8 +45,9 @@ angular.module('demo', [])
                 $scope.fixedCost.amount = data.metadata.fixedCosts.amount;
                 $scope.fixedCost.currency = data.metadata.fixedCosts.currencyUnit.code;
             }).error(function(data){
-                //reset previous wage calculation
                 $scope.wage = {};
+                $scope.fixedCost.amount = $scope.selectedCountry.economicFactors.fixedCosts.amount;
+                $scope.fixedCost.currency = $scope.selectedCountry.economicFactors.fixedCosts.currencyUnit.code;
             })
         }
     });

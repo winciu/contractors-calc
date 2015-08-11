@@ -43,19 +43,23 @@ public class WageService {
     /**
      * @param countryOfOrigin           code of a country where a remuneration/salary is received
      * @param dayRate                   day rate in a currency of a  given country of origin
+     * @param dayRateType               type of a given day rate (gross or net)
      * @param exchangeRatesProviderName provider name which exchange rates should be used while preforming calculation
      */
     @Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-    public Wage calculateWage(String countryOfOrigin, BigDecimal dayRate, String exchangeRatesProviderName) {
+    public Wage calculateWage(String countryOfOrigin, BigDecimal dayRate, GrossNetType dayRateType,
+                              String exchangeRatesProviderName) {
         final Country country = countriesRepository.findOne(countryOfOrigin);
         final Currency sourceCurrencyCode = Currency.getInstance(new Locale("pl", "PL"));
         final ExchangeRate exchangeRate = findExchangeRate(exchangeRatesProviderName, sourceCurrencyCode, country);
-        return calculateWage(dayRate, country, exchangeRate);
+        return calculateWage(dayRate, dayRateType, country, exchangeRate);
     }
 
-    private Wage calculateWage(BigDecimal dayRate, Country country, ExchangeRate exchangeRate) {
+    private Wage calculateWage(BigDecimal dayRate, GrossNetType dayRateType, Country country,
+                               ExchangeRate exchangeRate) {
         WageCalculator wageCalculator = new WageCalculator(country, exchangeRate);
-        return wageCalculator.calculate(Money.of(CurrencyUnit.of(country.getCurrency()), dayRate), workingDaysInMonth);
+        return wageCalculator.calculate(Money.of(CurrencyUnit.of(country.getCurrency()), dayRate), dayRateType,
+                                        workingDaysInMonth);
     }
 
     private ExchangeRate findExchangeRate(String exchangeRatesProviderName, Currency sourceCurrency,

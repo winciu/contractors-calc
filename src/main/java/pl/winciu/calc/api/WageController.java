@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import pl.winciu.calc.api.representation.ErrorRepresentation;
 import pl.winciu.calc.api.representation.WageMetadataRepresentation;
 import pl.winciu.calc.api.representation.WageRepresentation;
+import pl.winciu.calc.service.GrossNetType;
 import pl.winciu.calc.service.Wage;
 import pl.winciu.calc.service.WageService;
 
@@ -34,6 +35,7 @@ public class WageController {
     public @ResponseBody ResponseEntity<?> calculateWage(
             @RequestParam(value = "countryCode") String countryCode,
             @RequestParam(value = "dayRate") String dayRate,
+            @RequestParam(value = "dayRateType", defaultValue = "GROSS") GrossNetType dayRateType,
             @RequestParam(value = "exchgRateProvider", required = false) String providerName) {
         final ErrorRepresentation error = validateRequest(countryCode, dayRate);
         if (Objects.nonNull(error)) {
@@ -42,7 +44,7 @@ public class WageController {
 
         final Wage wage;
         try {
-            wage = wageService.calculateWage(countryCode, new BigDecimal(dayRate), providerName);
+            wage = wageService.calculateWage(countryCode, new BigDecimal(dayRate), dayRateType, providerName);
         } catch (Exception e) {
             return new ResponseEntity<Object>(new ErrorRepresentation(e.getLocalizedMessage()),
                                               HttpStatus.INTERNAL_SERVER_ERROR);
@@ -59,20 +61,19 @@ public class WageController {
         return new ResponseEntity<>(wageRepresentation, HttpStatus.OK);
     }
 
-    private ErrorRepresentation validateRequest(@RequestParam(value = "countryCode") String countryCode,
-                                                @RequestParam(value = "dayRate") String dayRate) {
+    private ErrorRepresentation validateRequest(String countryCode, String dayRate) {
         String message = null;
         if (StringUtils.isEmpty(countryCode)) {
             message = "Country is not specified";
-        }else {
+        }
+        if (StringUtils.isEmpty(dayRate)) {
+            message = "Day rate is not specified";
+        } else {
             try {
                 NumberUtils.parseNumber(dayRate, BigDecimal.class);
             } catch (IllegalArgumentException e) {
                 message = String.format("'%s' is not a valid number", dayRate);
             }
-        }
-        if (StringUtils.isEmpty(dayRate)) {
-            message = "Day rate is not specified";
         }
         if (Objects.isNull(message)) {
             return null;
