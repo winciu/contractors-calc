@@ -12,11 +12,19 @@ public class ExchangeRates implements Iterable<ExchangeRates.ExchangeRate> {
     private final String providerName;
     private final Set<ExchangeRate> rates;
 
+    /**
+     *
+     * @param providerName
+     */
     public ExchangeRates(String providerName) {
         this.providerName = providerName;
         rates = new HashSet<>();
     }
 
+    /**
+     *
+     * @return
+     */
     public String getProviderName() {
         return providerName;
     }
